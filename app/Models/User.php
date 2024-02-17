@@ -2,13 +2,24 @@
 
 namespace App\Models;
 
+use Database\Factories\UserFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Orchid\Filters\Filterable;
 use Orchid\Filters\Types\Like;
 use Orchid\Filters\Types\Where;
 use Orchid\Filters\Types\WhereDateStartEnd;
 use Orchid\Platform\Models\User as Authenticatable;
+use Orchid\Screen\AsSource;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject
 {
+
+    use AsSource;
+    use HasFactory;
+    use Filterable;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -18,6 +29,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'available_car_categories'
     ];
 
     /**
@@ -39,6 +51,7 @@ class User extends Authenticatable
     protected $casts = [
         'permissions'          => 'array',
         'email_verified_at'    => 'datetime',
+        'available_car_categories' => 'json',
     ];
 
     /**
@@ -66,4 +79,24 @@ class User extends Authenticatable
         'updated_at',
         'created_at',
     ];
+
+    public function carBookings(): BelongsTo
+    {
+        return $this->belongsTo(CarBooking::class);
+    }
+
+    protected static function newFactory(): UserFactory
+    {
+        return UserFactory::new();
+    }
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims(): array
+    {
+        return [];
+    }
 }
