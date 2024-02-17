@@ -2,6 +2,12 @@
 
 declare(strict_types=1);
 
+use App\Orchid\Screens\Car\CarEditScreen;
+use App\Orchid\Screens\Car\CarListScreen;
+use App\Orchid\Screens\CarBooking\CarBookingEditScreen;
+use App\Orchid\Screens\CarBooking\CarBookingListScreen;
+use App\Orchid\Screens\ComfortCategory\ComfortCategoryEditScreen;
+use App\Orchid\Screens\ComfortCategory\ComfortCategoryListScreen;
 use App\Orchid\Screens\Examples\ExampleActionsScreen;
 use App\Orchid\Screens\Examples\ExampleCardsScreen;
 use App\Orchid\Screens\Examples\ExampleChartsScreen;
@@ -83,5 +89,68 @@ Route::screen('roles', RoleListScreen::class)
     ->breadcrumbs(fn (Trail $trail) => $trail
         ->parent('platform.index')
         ->push(__('Roles'), route('platform.systems.roles')));
+
+Route::prefix('cars')->group(function () {
+    // Platform > Cars
+    Route::screen('/', CarListScreen::class)
+        ->name('platform.cars')
+        ->breadcrumbs(fn (Trail $trail) => $trail
+            ->parent('platform.index')
+            ->push(__('Cars'), route('platform.cars')));
+    // Platform > Cars > Create
+    Route::screen('/create', CarEditScreen::class)
+        ->name('platform.cars.create')
+        ->breadcrumbs(fn (Trail $trail) => $trail
+            ->parent('platform.cars')
+            ->push(__('Create'), route('platform.cars.create')));
+    // Platform > Cars > Edit
+    Route::screen('/{car}/edit', CarEditScreen::class)
+        ->name('platform.cars.edit')
+        ->breadcrumbs(fn (Trail $trail, $car) => $trail
+            ->parent('platform.cars')
+            ->push($car->model, route('platform.cars.edit', $car)));
+});
+
+Route::prefix('comfort')->group(function () {
+    // Platform > ComfortCategories
+    Route::screen('/', ComfortCategoryListScreen::class)
+        ->name('platform.comfortCategories')
+        ->breadcrumbs(fn (Trail $trail) => $trail
+            ->parent('platform.index')
+            ->push(__('Comfort categories'), route('platform.comfortCategories')));
+    // Platform > ComfortCategories > Create
+    Route::screen('/create', ComfortCategoryEditScreen::class)
+        ->name('platform.comfortCategories.create')
+        ->breadcrumbs(fn (Trail $trail) => $trail
+            ->parent('platform.comfortCategories')
+            ->push(__('Create comfort categories'), route('platform.comfortCategories.create')));
+    // Platform > ComfortCategories > Edit
+    Route::screen('/{comfortCategory}/edit', ComfortCategoryEditScreen::class)
+        ->name('platform.comfortCategories.edit')
+        ->breadcrumbs(fn (Trail $trail, $comfortCategory) => $trail
+            ->parent('platform.comfortCategories')
+            ->push($comfortCategory->title, route('platform.comfortCategories.edit', $comfortCategory)));
+});
+
+Route::prefix('booking')->group(function () {
+    // Platform > Booking
+    Route::screen('/', CarBookingListScreen::class)
+        ->name('platform.booking')
+        ->breadcrumbs(fn (Trail $trail) => $trail
+            ->parent('platform.index')
+            ->push(__('Booking'), route('platform.booking')));
+    // Platform > Booking > Create
+    Route::screen('/{carId}/create', CarBookingEditScreen::class)
+        ->name('platform.booking.create')
+        ->breadcrumbs(fn (Trail $trail, $carId) => $trail
+            ->parent('platform.booking')
+            ->push(__('Create'), route('platform.booking.create', $carId)));
+    // Platform > Cars > Edit
+    Route::screen('/{carBooking}/edit', CarBookingEditScreen::class)
+        ->name('platform.booking.edit')
+        ->breadcrumbs(fn (Trail $trail, $carBooking) => $trail
+            ->parent('platform.booking')
+            ->push('booking id' . '-' . $carBooking->id, route('platform.booking.edit', $carBooking)));
+});
 
 

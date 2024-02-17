@@ -34,6 +34,21 @@ class PlatformProvider extends OrchidServiceProvider
     public function menu(): array
     {
         return [
+            Menu::make(__('Booking'))
+                ->icon('browser')
+                ->route('platform.booking')
+                ->permission('platform.booking.read'),
+
+            Menu::make(__('Comfort category'))
+                ->icon('browser')
+                ->route('platform.comfortCategories')
+                ->permission('platform.cars.read'),
+
+            Menu::make(__('Cars'))
+                ->icon('browser')
+                ->route('platform.cars')
+                ->permission('platform.cars.read'),
+
             Menu::make(__('Users'))
                 ->icon('bs.people')
                 ->route('platform.systems.users')
@@ -59,6 +74,12 @@ class PlatformProvider extends OrchidServiceProvider
             ItemPermission::group(__('System'))
                 ->addPermission('platform.systems.roles', __('Roles'))
                 ->addPermission('platform.systems.users', __('Users')),
+            ItemPermission::group(__('Cars'))
+                ->addPermission('platform.cars.read', __('Access to read cars'))
+                ->addPermission('platform.cars.write', __('Access to write cars')),
+            ItemPermission::group(__('Booking'))
+                ->addPermission('platform.booking.read', __('Access to read booking'))
+                ->addPermission('platform.booking.write', __('Access to write booking')),
         ];
     }
 }

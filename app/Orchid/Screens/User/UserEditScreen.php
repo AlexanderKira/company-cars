@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Orchid\Screens\User;
 
 use App\Orchid\Layouts\Role\RolePermissionLayout;
+use App\Orchid\Layouts\User\UserComfortCategoryEditLayout;
 use App\Orchid\Layouts\User\UserEditLayout;
 use App\Orchid\Layouts\User\UserPasswordLayout;
 use App\Orchid\Layouts\User\UserRoleLayout;
@@ -132,6 +133,17 @@ class UserEditScreen extends Screen
                         ->method('save')
                 ),
 
+            Layout::block(UserComfortCategoryEditLayout::class)
+                ->title(__('Comfort Category'))
+                ->description(__('The comfort category gives you access to a class of affordable cars.'))
+                ->commands(
+                    Button::make(__('Save'))
+                        ->type(Color::BASIC)
+                        ->icon('bs.check-circle')
+                        ->canSee($this->user->exists)
+                        ->method('save')
+                ),
+
             Layout::block(RolePermissionLayout::class)
                 ->title(__('Permissions'))
                 ->description(__('Allow the user to perform some actions that are not provided for by his roles'))
@@ -151,6 +163,7 @@ class UserEditScreen extends Screen
      */
     public function save(User $user, Request $request)
     {
+
         $request->validate([
             'user.email' => [
                 'required',
@@ -167,9 +180,11 @@ class UserEditScreen extends Screen
             $builder->getModel()->password = Hash::make($request->input('user.password'));
         });
 
+        $availableCarCategories = $request->input('user.available_car_categories');
+
         $user
-            ->fill($request->collect('user')->except(['password', 'permissions', 'roles'])->toArray())
-            ->forceFill(['permissions' => $permissions])
+            ->fill($request->collect('user')->except(['password', 'permissions', 'roles', 'available_car_categories'])->toArray())
+            ->forceFill(['permissions' => $permissions, 'available_car_categories' => $availableCarCategories])
             ->save();
 
         $user->replaceRoles($request->input('user.roles'));
