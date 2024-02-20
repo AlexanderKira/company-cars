@@ -34,9 +34,11 @@ class CarBookingEditLayout extends Rows
             Label::make('comfort_category.description')
                 ->title('Description'),
             DateTimer::make('booking.start_date')
-                ->title('Start of booking'),
+                ->title('Start of booking')
+                ->enableTime(),
             DateTimer::make('booking.end_date')
-                ->title('End of booking'),
+                ->title('End of booking')
+                ->enableTime(),
             Button::make(__('Save'))
                 ->icon('check')
                 ->type(Color::DEFAULT())

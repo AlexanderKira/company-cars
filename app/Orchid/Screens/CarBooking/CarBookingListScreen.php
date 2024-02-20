@@ -19,6 +19,7 @@ class CarBookingListScreen extends Screen
     public function query(): iterable
     {
         $user = Auth::user();
+        $comfortCategoriesId = json_decode($user->comfort_categories_id, true);
 
         return [
             'booking' => CarBooking::filters()
@@ -26,8 +27,9 @@ class CarBookingListScreen extends Screen
                 ->defaultSort('id', 'desc')
                 ->paginate(),
             'cars' => Car::filters()
-                ->whereIn('comfort_category_id', $user->available_car_categories)
-                ->where('booking_status', false)->defaultSort('id', 'desc')
+                ->whereIn('comfort_category_id', $comfortCategoriesId)
+//                ->where('booking_status', false)->defaultSort('id', 'desc')
+                    //если забронирована, то доступна на следующий день после завершения бронирования
                 ->paginate(),
         ];
     }
