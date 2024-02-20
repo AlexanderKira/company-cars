@@ -180,11 +180,11 @@ class UserEditScreen extends Screen
             $builder->getModel()->password = Hash::make($request->input('user.password'));
         });
 
-        $availableCarCategories = $request->input('user.available_car_categories');
+        $comfortCategoriesId = $request->input('user.comfort_categories_id');
 
         $user
-            ->fill($request->collect('user')->except(['password', 'permissions', 'roles', 'available_car_categories'])->toArray())
-            ->forceFill(['permissions' => $permissions, 'available_car_categories' => $availableCarCategories])
+            ->fill($request->collect('user')->except(['password', 'permissions', 'roles', 'comfort_categories_id'])->toArray())
+            ->forceFill(['permissions' => $permissions, 'comfort_categories_id' => $comfortCategoriesId])
             ->save();
 
         $user->replaceRoles($request->input('user.roles'));

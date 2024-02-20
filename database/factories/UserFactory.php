@@ -32,19 +32,21 @@ class UserFactory extends Factory
             'password' => Hash::make('password'),
             'remember_token' => Str::random(10),
             'permissions' =>  [
-                "platform.index" => "1",
-                "platform.systems.roles" => "0",
-                "platform.systems.users" => "0",
-                "platform.systems.attachment" => "0",
-                "platform.booking.read" => '1',
-                "platform.booking.write" => '1',
+                "platform.index" => true,
+                "platform.systems.roles" => false,
+                "platform.systems.users" => false,
+                "platform.systems.attachment" => false,
+                "platform.booking.read" => true,
+                "platform.booking.write" => true,
             ],
-            'available_car_categories' => $this->comfortCategory()
+            'comfort_categories_id' => json_encode($this->comfortCategory())
         ];
     }
     public function comfortCategory(): array
     {
-        return ComfortCategory::all()->pluck('title')->toArray();
+        return ComfortCategory::all()->pluck('id')->map(function ($id) {
+            return (string) $id;
+        })->toArray();
     }
 
     /**
