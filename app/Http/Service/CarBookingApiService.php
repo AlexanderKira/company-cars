@@ -59,7 +59,7 @@ class CarBookingApiService
                 'comfort_category' => $this->getComfortCategory($car),
                 'chauffeur' => $car->chauffeur,
                 'booking_status' => $car->booking_status ? 'booked' : 'available',
-                'start_date_booking' => $this->getAvailableBookingDate($car, $startDate, $endDate)
+                'start_date_booking' => $this->getAvailableBookingDate($car, $endDate)
             ];
         }
 

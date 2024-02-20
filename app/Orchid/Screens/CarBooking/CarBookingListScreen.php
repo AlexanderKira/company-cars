@@ -28,8 +28,6 @@ class CarBookingListScreen extends Screen
                 ->paginate(),
             'cars' => Car::filters()
                 ->whereIn('comfort_category_id', $comfortCategoriesId)
-//                ->where('booking_status', false)->defaultSort('id', 'desc')
-                    //если забронирована, то доступна на следующий день после завершения бронирования
                 ->paginate(),
         ];
     }
