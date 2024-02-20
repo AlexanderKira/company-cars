@@ -1,0 +1,180 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Company cars API",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/auth/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "get admin access token(sample).",
+                "operationId": "e12be6e20eab1727fe7da778a1ea5882",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "allOf": [
+                                    {
+                                        "properties": {
+                                            "email": {
+                                                "type": "string",
+                                                "example": "admin@admin.com"
+                                            },
+                                            "password": {
+                                                "type": "string",
+                                                "example": "password"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Сopy the access token into the authorization.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "access_token": {
+                                            "type": "bearer",
+                                            "example": "access_token"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/car-booking/index": {
+            "get": {
+                "tags": [
+                    "car-booking"
+                ],
+                "summary": "Show all car reservations or filter by model, comfort category, date and time of reservation (access_token required).",
+                "operationId": "a744d05b4cd035555d2da7701bf7ed92",
+                "parameters": [
+                    {
+                        "name": "model",
+                        "in": "query",
+                        "description": "Audi A8, BMW 7, MERCEDES-BENZ C-CLASS, Audi A3",
+                        "required": false,
+                        "allowEmptyValue": true,
+                        "style": "form",
+                        "explode": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "example": "Audi a8"
+                            }
+                        }
+                    },
+                    {
+                        "name": "comfort_categories_title",
+                        "in": "query",
+                        "description": "luxury, representative, average, golf",
+                        "required": false,
+                        "allowEmptyValue": true,
+                        "style": "form",
+                        "explode": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "example": "luxury"
+                            }
+                        }
+                    },
+                    {
+                        "name": "start_date",
+                        "in": "query",
+                        "description": "car-booking start date",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date-time"
+                        },
+                        "example": "2024-02-18 08:00:00"
+                    },
+                    {
+                        "name": "end_date",
+                        "in": "query",
+                        "description": "car-booking end date",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date-time"
+                        },
+                        "example": "2024-02-30 18:00:00"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Filtering by status and date we get a list of applications.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "cars": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": "10"
+                                                },
+                                                "model": {
+                                                    "type": "string",
+                                                    "example": "Audi A8"
+                                                },
+                                                "chauffeur": {
+                                                    "type": "string",
+                                                    "example": "Prof. Brant Lehner"
+                                                },
+                                                "comfort_category": {
+                                                    "type": "string",
+                                                    "example": "Audi A8"
+                                                },
+                                                "booking_status": {
+                                                    "type": "string",
+                                                    "example": "available"
+                                                },
+                                                "start_date_booking": {
+                                                    "type": "string",
+                                                    "example": "2024-02-18 00:00:00"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer"
+            }
+        }
+    }
+}

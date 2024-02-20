@@ -25,7 +25,7 @@ class UserComfortCategoryEditLayout extends Rows
     protected function fields(): iterable
     {
         return [
-            Select::make('user.available_car_categories.')
+            Select::make('user.comfort_categories_id.')
                 ->fromModel(ComfortCategory::class, 'title', 'id')
                 ->multiple()
                 ->title(__('Comfort categories'))
