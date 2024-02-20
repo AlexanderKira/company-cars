@@ -19,11 +19,17 @@ services:
             IGNITION_LOCAL_SITES_PATH: '${PWD}'
         volumes:
             - '.:/var/www/html'
+            - ./crontab:/etc/cron.d/laravel-scheduler
         networks:
             - sail
         depends_on:
             - mysql
             - redis
+    cron:
+        image: alpine
+        volumes:
+            - .:/var/www/html
+        command: crond -f
     mysql:
         image: 'mysql/mysql-server:8.0'
         ports:
